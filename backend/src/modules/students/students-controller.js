@@ -106,31 +106,9 @@ const handleGetStudentDetail = asyncHandler(async (req, res) => {
       });
     }
     
-    const formattedResponse = {
-      id: studentData.id,
-      name: studentData.name,
-      gender: studentData.gender,
-      dob: studentData.dob,
-      phone: studentData.phone,
-      email: studentData.email,
-      class: studentData.class,
-      section: studentData.section,
-      roll: studentData.roll?.toString(),
-      admissionDate: studentData.admissionDate,
-      currentAddress: studentData.currentAddress,
-      permanentAddress: studentData.permanentAddress,
-      fatherName: studentData.fatherName,
-      fatherPhone: studentData.fatherPhone || "",
-      motherName: studentData.motherName || "",
-      motherPhone: studentData.motherPhone || "",
-      guardianName: studentData.guardianName,
-      guardianPhone: studentData.guardianPhone,
-      relationOfGuardian: studentData.relationOfGuardian,
-      systemAccess: studentData.systemAccess || false,
-      reporterName: studentData.reporterName || "Admin"
-    };
+  
     
-    return res.status(200).json(formattedResponse);
+    return res.status(200).json({...studentData, roll: studentData.roll?.toString() || ""});
   } catch (error) {
     return res.status(error.statusCode || 500).json({
       success: false,
