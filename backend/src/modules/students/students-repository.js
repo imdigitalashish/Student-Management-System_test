@@ -19,14 +19,15 @@ const findAllStudents = async (payload) => {
         FROM users t1
         LEFT JOIN user_profiles t3 ON t1.id = t3.user_id
         WHERE t1.role_id = 3`;
+        
     let queryParams = [];
     if (name) {
-        query += ` AND t1.name = $${queryParams.length + 1}`;
-        queryParams.push(name);
+        query += ` AND t1.name ILIKE $${queryParams.length + 1}`; // Partial Matching
+        queryParams.push(`%${name}%`);
     }
     if (className) {
-        query += ` AND t3.class_name = $${queryParams.length + 1}`;
-        queryParams.push(className);
+        query += ` AND t3.class_name ILIKE $${queryParams.length + 1}`; // Partial Matching
+        queryParams.push(`%${className}%`);
     }
     if (section) {
         query += ` AND t3.section_name = $${queryParams.length + 1}`;
@@ -42,6 +43,7 @@ const findAllStudents = async (payload) => {
     const { rows } = await processDBRequest({ query, queryParams });
     return rows;
 }
+
 
 const addOrUpdateStudent = async (payload) => {
     const query = "SELECT * FROM student_add_update($1)";
